@@ -1,10 +1,14 @@
 #this is my first program
 
+import argparse
 import tkinter as tk
 import tkinter.messagebox as messagebox
 import random
 import winsound
 
+parser = argparse.ArgumentParser(description="Change the amount of error windows.")
+parser.add_argument('-w','--ew',type=int, default=40)
+args = parser.parse_args()
 
 window = tk.Tk()
 window.geometry("1000x710")
@@ -37,7 +41,7 @@ def submit():
 
 def wrong_answer():
     winsound.Beep(440, 500)
-    for _ in range(100):
+    for _ in range(args.ew +1):
         errorMessage = tk.Toplevel()
         errorMessage.title("ERROR")
         errorMessage.geometry(f"+{int(random.randint(10,2000))}+{int(random.randint(10,2000))}")
