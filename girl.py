@@ -5,7 +5,6 @@ import tkinter.messagebox as messagebox
 import random
 import winsound
 
-response_list = ["You are Wrong!","I can't believe you!","That makes me sad...",">:^(","Are you stupid?","it's not like I like you or anything...","T-Tch! S-Shut up!"]
 
 window = tk.Tk()
 window.geometry("1000x710")
@@ -16,6 +15,10 @@ window.config(background="#7c6b6b")
 
 photo = tk.PhotoImage(file="braided red cutie.png")
 photo = photo.subsample(2,2)
+
+with open("phrases.txt") as mytxt:
+    for line in mytxt:
+        phrase = mytxt.readlines()
 
 def submit():
     user_response = entry.get()
@@ -38,7 +41,7 @@ def wrong_answer():
         errorMessage = tk.Toplevel()
         errorMessage.title("ERROR")
         errorMessage.geometry(f"+{int(random.randint(10,2000))}+{int(random.randint(10,2000))}")
-        errorlabel = tk.Label(errorMessage, text= random.choice(response_list), font= ("",50,"bold"))
+        errorlabel = tk.Label(errorMessage, text= random.choice(phrase), font= ("",50,"bold"))
         errorlabel.pack()
 
 label = tk.Label(window,text='This is a picture of an anime girl.',
