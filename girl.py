@@ -1,28 +1,20 @@
 #this is my first program
-
+import os
 import argparse
 import tkinter as tk
 import tkinter.messagebox as messagebox
 import random
 import winsound
 
-parser = argparse.ArgumentParser(description="Change the amount of error windows.")
-parser.add_argument('-w','--ew',type=int, default=40)
-args = parser.parse_args()
+cmd = "wmic path Win32_VideoController get CurrentVerticalResolution,CurrentHorizontalResolution"
+screensize = tuple(map(int,os.popen(cmd).read().split()[-2::]))
 
-window = tk.Tk()
-window.geometry("1000x710")
-window.title("My First GUI")
-icon = tk.PhotoImage(file="3580-23831-8107.png")
-window.iconphoto(True,icon)
-window.config(background="#7c6b6b")
-
-photo = tk.PhotoImage(file="braided red cutie.png")
-photo = photo.subsample(2,2)
-
-with open("phrases.txt") as mytxt:
-    for line in mytxt:
-        phrase = mytxt.readlines()
+def window_center(width=1000, height=710):
+    screen_width = screensize[0]
+    screen_height = screensize[1]
+    x = (screen_width/2) - (width/2)
+    y = (screen_height/2) - (height/2)
+    window.geometry('%dx%d+%d+%d' % (width, height, x, y))
 
 def submit():
     user_response = entry.get()
@@ -41,12 +33,30 @@ def submit():
 
 def wrong_answer():
     winsound.Beep(440, 500)
-    for _ in range(args.ew +1):
+    for _ in range(args.error_windows +1):
         errorMessage = tk.Toplevel()
         errorMessage.title("ERROR")
-        errorMessage.geometry(f"+{int(random.randint(10,2000))}+{int(random.randint(10,2000))}")
-        errorlabel = tk.Label(errorMessage, text= random.choice(phrase), font= ("",50,"bold"))
+        errorMessage.geometry(f"+{int(random.randint(10,screensize[0]))}+{int(random.randint(10,screensize[1]))}")
+        errorlabel = tk.Label(errorMessage, text= random.choice(phrase_list), font= ("",50,"bold"))
         errorlabel.pack()
+
+parser = argparse.ArgumentParser(description="Change the amount of error windows.")
+parser.add_argument('-ew','--error_windows',type=int, default=40)
+args = parser.parse_args()
+
+window = tk.Tk()
+window.geometry(window_center())
+window.title("My First GUI")
+icon = tk.PhotoImage(file="3580-23831-8107.png")
+window.iconphoto(True,icon)
+window.config(background="#7c6b6b")
+
+photo = tk.PhotoImage(file="braided red cutie.png")
+photo = photo.subsample(2,2)
+
+with open("phrases.txt") as file_content:
+    for line in file_content:
+        phrase_list = file_content.readlines()
 
 label = tk.Label(window,text='This is a picture of an anime girl.',
               font=("",14,"italic"),
