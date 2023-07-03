@@ -1,4 +1,5 @@
 #this is my first program
+import os
 import argparse
 import tkinter as tk
 import tkinter.messagebox as messagebox
@@ -6,8 +7,12 @@ import random
 import winsound
 
 def window_center(width=1000, height=710):
-    x = (screen_width/2) - (width/2)
-    y = (screen_height/2) - (height/2)
+    sw = os.environ.get('SCREEN_WIDTH', screen_width)
+    sh = os.environ.get('SCREEN_HEIGHT', screen_height)
+    print(sw)
+    print(os.environ.get('SCREEN_WIDTH'))
+    x = (int(sw)/2) - (width/2)
+    y = (int(sh)/2) - (height/2)
     window.geometry('%dx%d+%d+%d' % (width, height, x, y))
 
 def submit():
