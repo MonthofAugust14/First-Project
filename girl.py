@@ -1,17 +1,11 @@
 #this is my first program
-import os
 import argparse
 import tkinter as tk
 import tkinter.messagebox as messagebox
 import random
 import winsound
 
-cmd = "wmic path Win32_VideoController get CurrentVerticalResolution,CurrentHorizontalResolution"
-screensize = tuple(map(int,os.popen(cmd).read().split()[-2::]))
-
 def window_center(width=1000, height=710):
-    screen_width = screensize[0]
-    screen_height = screensize[1]
     x = (screen_width/2) - (width/2)
     y = (screen_height/2) - (height/2)
     window.geometry('%dx%d+%d+%d' % (width, height, x, y))
@@ -36,7 +30,7 @@ def wrong_answer():
     for _ in range(args.error_windows +1):
         errorMessage = tk.Toplevel()
         errorMessage.title("ERROR")
-        errorMessage.geometry(f"+{int(random.randint(10,screensize[0]))}+{int(random.randint(10,screensize[1]))}")
+        errorMessage.geometry(f"+{int(random.randint(0,screen_width))}+{int(random.randint(0,screen_height))}")
         errorlabel = tk.Label(errorMessage, text= random.choice(phrase_list), font= ("",50,"bold"))
         errorlabel.pack()
 
@@ -45,6 +39,10 @@ parser.add_argument('-ew','--error_windows',type=int, default=40)
 args = parser.parse_args()
 
 window = tk.Tk()
+window.withdraw()
+screen_width = window.winfo_screenwidth()
+screen_height = window.winfo_screenheight()
+window.deiconify()
 window.geometry(window_center())
 window.title("My First GUI")
 icon = tk.PhotoImage(file="3580-23831-8107.png")
